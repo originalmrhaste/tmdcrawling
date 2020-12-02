@@ -3,30 +3,34 @@ import pickle
 import json
 import scrapy
 import itertools
+import requests
 
-with open('industry_ids.pickle', 'rb') as f:
-    INDUSTRY_IDS = pickle.load(f)
-with open('category_ids.pickle','rb') as f:
-    CATEGORY_IDS = pickle.load(f)
-#INDUSTRY_IDS = [10,2,13,6,12,16,22,1,5,19,23,7,18,4,20,11,9,21,17,8,15,14,3,24]
-#REGION_IDS = [19,20,22,25,17,18,21,23,24,3,4,5,16,12,14,13,15]
 
 class JobsSpider(scrapy.Spider):
     """Spider for scraping api of jobs.ch"""
 
     name = 'jobs'
 
+    @staticmethod
+    def get_ids(facet_key):
+        response = requests.get('https://jobs.ch/api/v1/public/search?')
+        json_response = json.loads(response.text)
+        return list(json_response['facets'][facet_key].keys())
+
     def __init__(self, *args, **kwargs):
         super(JobsSpider, self).__init__(*args, **kwargs)
         self.num_rows = 100
         self.base_url = f'https://www.jobs.ch/api/v1/public/search?rows={self.num_rows}'
         self.visited = set()
+        self.industry_ids = self.get_ids('industry_ids')
+        self.category_ids = self.get_ids('category_ids')
+
 
     def start_requests(self):
         """Populate starting urls with api calls
         containg combination of industry and category ids"""
 
-        industry_category = itertools.product(INDUSTRY_IDS, CATEGORY_IDS)
+        industry_category = itertools.product(self.industry_ids, self.category_ids)
 
         urls = [
                 self.base_url + f'&industry-ids[]={industry_id}&category-ids[]={category_id}'
