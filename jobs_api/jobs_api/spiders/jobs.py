@@ -13,6 +13,8 @@ class JobsSpider(scrapy.Spider):
 
     @staticmethod
     def get_ids(facet_key):
+        """Get list of potential ids of a
+           particular facet key from api reponse"""
         response = requests.get('https://jobs.ch/api/v1/public/search?')
         json_response = json.loads(response.text)
         return list(json_response['facets'][facet_key].keys())
