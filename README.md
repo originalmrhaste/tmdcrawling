@@ -1,3 +1,3 @@
 # tmdcrawling
 
-After finishing the crawl, run deduplicate.py to get the same data as in gzip.
+Crawler that scrapes jobs.ch api based on industry and category.
