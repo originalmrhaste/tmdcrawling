@@ -20,7 +20,7 @@ USER_AGENT = 'Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv)
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 16
+CONCURRENT_REQUESTS = 100
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -53,6 +53,7 @@ COOKIES_ENABLED = False
 #DOWNLOADER_MIDDLEWARES = {
 #    'jobs_api.middlewares.JobsApiDownloaderMiddleware': 543,
 #}
+RETRY_HTTP_CODES = [500, 503, 504, 522, 524, 408, 429]
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
